@@ -12,8 +12,6 @@ declare(strict_types=1);
 
 namespace CakeI18nLint\Command;
 
-use Cake\Console\Arguments;
-use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use CakeI18nLint\Lint\Hints;
 use CakeI18nLint\Lint\Issue;
@@ -45,8 +43,10 @@ class LintCommand extends AbstractCommand
             ]);
     }
 
-    public function execute(Arguments $args, ConsoleIo $io): int
+    public function execute(): int
     {
+        $args = $this->args;
+        $io = $this->io;
         $project = $this->project($args, $io);
         if ($project === null) {
             return static::CODE_ERROR;

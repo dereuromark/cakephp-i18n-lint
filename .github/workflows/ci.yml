@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches:
-      - main
+      - cake6
   pull_request:
   workflow_dispatch:
 
@@ -13,10 +13,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-version: ['8.2', '8.3', '8.4', '8.5']
+        php-version: ['8.5']
         prefer-lowest: ['']
         include:
-          - php-version: '8.2'
+          - php-version: '8.5'
             prefer-lowest: 'prefer-lowest'
 
     steps:
