@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace CakeI18nLint\Command;
 
-use Cake\Console\ConsoleIoInterface;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Utility\Filesystem;
 use CakeI18nLint\Po\ParseException;

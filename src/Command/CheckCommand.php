@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace CakeI18nLint\Command;
 
-use Cake\Console\ConsoleIoInterface;
 use Cake\Console\ConsoleOptionParser;
 use CakeI18nLint\Lint\Issue;
 
