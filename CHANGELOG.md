@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- `lint --fail-on <rules>` reports the listed warning rules as errors, e.g. `po.missing,po.obsolete`.
+
 ## [0.1.1] - 2026-10-11
 
 - `check` and `lint` end with a `How to fix:` block, one hint per reported rule (#1).

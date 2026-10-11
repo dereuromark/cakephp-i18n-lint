@@ -15,6 +15,7 @@ namespace CakeI18nLint\Command;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
+use CakeI18nLint\Lint\Hints;
 use CakeI18nLint\Lint\Issue;
 use CakeI18nLint\Lint\Linter;
 use CakeI18nLint\Po\Catalog;
@@ -38,6 +39,9 @@ class LintCommand extends AbstractCommand
             ->addOption('strict', [
                 'help' => 'Treat warnings (untranslated, fuzzy, out of sync) as failures.',
                 'boolean' => true,
+            ])
+            ->addOption('fail-on', [
+                'help' => 'Comma-separated warning rules to report as errors, e.g. `po.missing,po.obsolete`.',
             ]);
     }
 
@@ -48,11 +52,22 @@ class LintCommand extends AbstractCommand
             return static::CODE_ERROR;
         }
 
+        $failOn = array_filter(array_map(trim(...), explode(',', (string)$this->stringOption($args, 'fail-on'))));
+        $unknown = array_diff($failOn, Hints::rules());
+        if ($unknown) {
+            $io->error(sprintf('Unknown rule(s) for --fail-on: %s.', implode(', ', $unknown)));
+
+            return static::CODE_ERROR;
+        }
+
         $issues = $this->collect($project);
         $format = (string)$args->getOption('format');
         $counts = [Issue::ERROR => 0, Issue::WARNING => 0];
         $rules = [];
         foreach ($issues as $issue) {
+            if (in_array($issue->rule, $failOn, true)) {
+                $issue = $issue->asError();
+            }
             $counts[$issue->severity]++;
             $rules[] = $issue->rule;
             $this->report($io, $project, $issue, $format);

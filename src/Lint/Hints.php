@@ -46,6 +46,14 @@ class Hints
     ];
 
     /**
+     * @return array<string> Every rule the tool can report.
+     */
+    public static function rules(): array
+    {
+        return array_keys(static::HINTS);
+    }
+
+    /**
      * @param array<string> $rules Rules that were reported.
      * @param string $sync Pasteable sync command.
      * @param string $extract Pasteable extract command.

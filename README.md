@@ -112,7 +112,15 @@ An entry whose plural form changed in the template (singular to plural, or anoth
 | `po.whitespace`          | warning  | Leading or trailing whitespace differs from the source.            |
 | `po.plural-header`       | warning  | Plural entries exist, but the header has no `Plural-Forms`.        |
 
-Errors exit with `1`. Pass `--strict` to fail on warnings too.
+Errors exit with `1`. Pass `--strict` to fail on warnings too, or `--fail-on` to
+promote selected warnings only:
+
+```bash
+vendor/bin/i18n-lint lint --fail-on po.missing,po.obsolete
+```
+
+That setup requires every PO file to be in sync with its template, without requiring
+every string to be translated. `sync` fixes both rules.
 
 After the findings, a `How to fix:` block lists one line per reported rule, with the
 `sync` or `extract` command to run where that is the fix.
