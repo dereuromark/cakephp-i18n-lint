@@ -10,15 +10,15 @@ declare(strict_types=1);
  * @license https://opensource.org/licenses/MIT MIT License
  */
 
-namespace I18nLint\Command;
+namespace CakeI18nLint\Command;
 
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Utility\Filesystem;
-use I18nLint\Po\ParseException;
-use I18nLint\Po\Parser;
-use I18nLint\Syncer;
+use CakeI18nLint\Po\ParseException;
+use CakeI18nLint\Po\Parser;
+use CakeI18nLint\Syncer;
 
 /**
  * Brings existing PO files in line with their POT template.

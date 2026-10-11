@@ -10,10 +10,10 @@ declare(strict_types=1);
  * @license https://opensource.org/licenses/MIT MIT License
  */
 
-namespace I18nLint;
+namespace CakeI18nLint;
 
-use I18nLint\Po\Catalog;
-use I18nLint\Po\Entry;
+use CakeI18nLint\Po\Catalog;
+use CakeI18nLint\Po\Entry;
 
 /**
  * Aligns a PO catalog with its POT template without touching existing translations.

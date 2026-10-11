@@ -10,18 +10,18 @@ declare(strict_types=1);
  * @license https://opensource.org/licenses/MIT MIT License
  */
 
-namespace I18nLint\Command;
+namespace CakeI18nLint\Command;
 
 use Cake\Console\Arguments;
 use Cake\Console\BaseCommand;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Utility\Filesystem;
+use CakeI18nLint\Extractor;
+use CakeI18nLint\Lint\Issue;
+use CakeI18nLint\Project;
+use CakeI18nLint\TemplateDiffer;
 use Closure;
-use I18nLint\Extractor;
-use I18nLint\Lint\Issue;
-use I18nLint\Project;
-use I18nLint\TemplateDiffer;
 use InvalidArgumentException;
 
 abstract class AbstractCommand extends BaseCommand
@@ -86,7 +86,7 @@ abstract class AbstractCommand extends BaseCommand
      *
      * @template T
      *
-     * @param \I18nLint\Project $project
+     * @param \CakeI18nLint\Project $project
      * @param \Cake\Console\ConsoleIo $io
      * @param \Closure(array{domains: array<string, array{generated: string, target: string, new: bool, missing: array<string>, stale: array<string>}>, orphans: array<string, string>}): T $callback
      *

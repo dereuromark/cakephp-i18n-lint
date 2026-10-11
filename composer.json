@@ -37,12 +37,12 @@
     },
     "autoload": {
         "psr-4": {
-            "I18nLint\\": "src/"
+            "CakeI18nLint\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "I18nLint\\Test\\": "tests/"
+            "CakeI18nLint\\Test\\": "tests/"
         }
     },
     "bin": [

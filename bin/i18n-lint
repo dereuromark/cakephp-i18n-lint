@@ -2,7 +2,7 @@
 <?php
 declare(strict_types=1);
 
-use I18nLint\Runner;
+use CakeI18nLint\Runner;
 
 $autoloaders = [
     $GLOBALS['_composer_autoload_path'] ?? null,

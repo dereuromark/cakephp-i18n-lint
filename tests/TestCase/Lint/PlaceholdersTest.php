@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace I18nLint\Test\TestCase\Lint;
+namespace CakeI18nLint\Test\TestCase\Lint;
 
-use I18nLint\Lint\Placeholders;
+use CakeI18nLint\Lint\Placeholders;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 

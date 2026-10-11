@@ -10,7 +10,7 @@ declare(strict_types=1);
  * @license https://opensource.org/licenses/MIT MIT License
  */
 
-namespace I18nLint\Po;
+namespace CakeI18nLint\Po;
 
 /**
  * Parses PO/POT files into entries that keep their original text, so a
@@ -72,7 +72,7 @@ class Parser
     /**
      * @param array<array{int, string}> $block
      *
-     * @throws \I18nLint\Po\ParseException
+     * @throws \CakeI18nLint\Po\ParseException
      */
     protected function parseBlock(array $block): Entry
     {

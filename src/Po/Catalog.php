@@ -10,12 +10,12 @@ declare(strict_types=1);
  * @license https://opensource.org/licenses/MIT MIT License
  */
 
-namespace I18nLint\Po;
+namespace CakeI18nLint\Po;
 
 class Catalog
 {
     /**
-     * @param array<\I18nLint\Po\Entry> $entries In file order, header and obsolete entries included.
+     * @param array<\CakeI18nLint\Po\Entry> $entries In file order, header and obsolete entries included.
      */
     public function __construct(public array $entries = [])
     {
@@ -35,7 +35,7 @@ class Catalog
     /**
      * Active entries indexed by key; the first one wins on duplicates.
      *
-     * @return array<string, \I18nLint\Po\Entry>
+     * @return array<string, \CakeI18nLint\Po\Entry>
      */
     public function messages(): array
     {

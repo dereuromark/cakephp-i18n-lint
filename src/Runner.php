@@ -10,18 +10,18 @@ declare(strict_types=1);
  * @license https://opensource.org/licenses/MIT MIT License
  */
 
-namespace I18nLint;
+namespace CakeI18nLint;
 
 use Cake\Console\ConsoleIo;
-use I18nLint\Command\CheckCommand;
-use I18nLint\Command\ExtractCommand;
-use I18nLint\Command\LintCommand;
-use I18nLint\Command\SyncCommand;
+use CakeI18nLint\Command\CheckCommand;
+use CakeI18nLint\Command\ExtractCommand;
+use CakeI18nLint\Command\LintCommand;
+use CakeI18nLint\Command\SyncCommand;
 
 class Runner
 {
     /**
-     * @var array<string, class-string<\I18nLint\Command\AbstractCommand>>
+     * @var array<string, class-string<\CakeI18nLint\Command\AbstractCommand>>
      */
     public const COMMANDS = [
         'check' => CheckCommand::class,

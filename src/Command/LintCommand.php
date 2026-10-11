@@ -10,17 +10,17 @@ declare(strict_types=1);
  * @license https://opensource.org/licenses/MIT MIT License
  */
 
-namespace I18nLint\Command;
+namespace CakeI18nLint\Command;
 
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
-use I18nLint\Lint\Issue;
-use I18nLint\Lint\Linter;
-use I18nLint\Po\Catalog;
-use I18nLint\Po\ParseException;
-use I18nLint\Po\Parser;
-use I18nLint\Project;
+use CakeI18nLint\Lint\Issue;
+use CakeI18nLint\Lint\Linter;
+use CakeI18nLint\Po\Catalog;
+use CakeI18nLint\Po\ParseException;
+use CakeI18nLint\Po\Parser;
+use CakeI18nLint\Project;
 
 /**
  * Validates POT and PO files.
@@ -68,7 +68,7 @@ class LintCommand extends AbstractCommand
     }
 
     /**
-     * @return array<\I18nLint\Lint\Issue>
+     * @return array<\CakeI18nLint\Lint\Issue>
      */
     protected function collect(Project $project): array
     {
@@ -99,7 +99,7 @@ class LintCommand extends AbstractCommand
 
     /**
      * @param string $file
-     * @param array<\I18nLint\Lint\Issue> $issues
+     * @param array<\CakeI18nLint\Lint\Issue> $issues
      */
     protected function parse(string $file, array &$issues): ?Catalog
     {

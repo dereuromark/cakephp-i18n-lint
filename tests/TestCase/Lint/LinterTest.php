@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace I18nLint\Test\TestCase\Lint;
+namespace CakeI18nLint\Test\TestCase\Lint;
 
-use I18nLint\Lint\Issue;
-use I18nLint\Lint\Linter;
-use I18nLint\Po\Parser;
+use CakeI18nLint\Lint\Issue;
+use CakeI18nLint\Lint\Linter;
+use CakeI18nLint\Po\Parser;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace I18nLint\Test\TestCase\Command;
+namespace CakeI18nLint\Test\TestCase\Command;
 
 use Cake\Console\ConsoleIo;
 use Cake\Console\TestSuite\StubConsoleOutput;
 use Cake\Utility\Filesystem;
-use I18nLint\Runner;
+use CakeI18nLint\Runner;
 use PHPUnit\Framework\TestCase;
 
 class CommandTest extends TestCase

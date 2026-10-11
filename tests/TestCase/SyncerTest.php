@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace I18nLint\Test\TestCase;
+namespace CakeI18nLint\Test\TestCase;
 
-use I18nLint\Po\Parser;
-use I18nLint\Syncer;
+use CakeI18nLint\Po\Parser;
+use CakeI18nLint\Syncer;
 use PHPUnit\Framework\TestCase;
 
 class SyncerTest extends TestCase

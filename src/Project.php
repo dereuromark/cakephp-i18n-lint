@@ -10,7 +10,7 @@ declare(strict_types=1);
  * @license https://opensource.org/licenses/MIT MIT License
  */
 
-namespace I18nLint;
+namespace CakeI18nLint;
 
 use InvalidArgumentException;
 

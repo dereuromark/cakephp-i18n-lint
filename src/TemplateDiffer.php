@@ -10,9 +10,9 @@ declare(strict_types=1);
  * @license https://opensource.org/licenses/MIT MIT License
  */
 
-namespace I18nLint;
+namespace CakeI18nLint;
 
-use I18nLint\Po\Parser;
+use CakeI18nLint\Po\Parser;
 
 /**
  * Compares freshly extracted POT files with the committed ones by message, not by bytes.

@@ -10,10 +10,10 @@ declare(strict_types=1);
  * @license https://opensource.org/licenses/MIT MIT License
  */
 
-namespace I18nLint\Lint;
+namespace CakeI18nLint\Lint;
 
-use I18nLint\Po\Catalog;
-use I18nLint\Po\Entry;
+use CakeI18nLint\Po\Catalog;
+use CakeI18nLint\Po\Entry;
 use IntlException;
 use MessageFormatter;
 
@@ -22,7 +22,7 @@ class Linter
     /**
      * Checks the source strings of a template.
      *
-     * @return array<\I18nLint\Lint\Issue>
+     * @return array<\CakeI18nLint\Lint\Issue>
      */
     public function lintPot(string $file, Catalog $pot): array
     {
@@ -46,7 +46,7 @@ class Linter
     /**
      * Checks a translation catalog, optionally against its template.
      *
-     * @return array<\I18nLint\Lint\Issue>
+     * @return array<\CakeI18nLint\Lint\Issue>
      */
     public function lintPo(string $file, Catalog $po, string $locale, ?Catalog $pot = null): array
     {
@@ -119,7 +119,7 @@ class Linter
     }
 
     /**
-     * @return array<\I18nLint\Lint\Issue>
+     * @return array<\CakeI18nLint\Lint\Issue>
      */
     protected function lintTranslations(string $file, Entry $entry, string $locale): array
     {
@@ -184,7 +184,7 @@ class Linter
     }
 
     /**
-     * @return array<\I18nLint\Lint\Issue>
+     * @return array<\CakeI18nLint\Lint\Issue>
      */
     protected function duplicates(string $file, Catalog $catalog): array
     {

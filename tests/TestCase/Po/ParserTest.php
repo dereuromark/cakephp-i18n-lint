@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace I18nLint\Test\TestCase\Po;
+namespace CakeI18nLint\Test\TestCase\Po;
 
-use I18nLint\Po\ParseException;
-use I18nLint\Po\Parser;
+use CakeI18nLint\Po\ParseException;
+use CakeI18nLint\Po\Parser;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 

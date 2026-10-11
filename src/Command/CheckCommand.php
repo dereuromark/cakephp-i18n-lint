@@ -10,12 +10,12 @@ declare(strict_types=1);
  * @license https://opensource.org/licenses/MIT MIT License
  */
 
-namespace I18nLint\Command;
+namespace CakeI18nLint\Command;
 
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
-use I18nLint\Lint\Issue;
+use CakeI18nLint\Lint\Issue;
 
 /**
  * Fails when the committed POT files no longer match the source code.
