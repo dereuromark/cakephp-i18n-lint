@@ -12,8 +12,6 @@ declare(strict_types=1);
 
 namespace CakeI18nLint\Command;
 
-use Cake\Console\Arguments;
-use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Utility\Filesystem;
 use CakeI18nLint\Po\ParseException;
@@ -43,8 +41,10 @@ class SyncCommand extends AbstractCommand
             ]);
     }
 
-    public function execute(Arguments $args, ConsoleIo $io): int
+    public function execute(): int
     {
+        $args = $this->args;
+        $io = $this->io;
         $project = $this->project($args, $io);
         if ($project === null) {
             return static::CODE_ERROR;

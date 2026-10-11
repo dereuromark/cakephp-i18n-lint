@@ -14,7 +14,7 @@ namespace CakeI18nLint\Command;
 
 use Cake\Console\Arguments;
 use Cake\Console\BaseCommand;
-use Cake\Console\ConsoleIo;
+use Cake\Console\ConsoleIoInterface;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Utility\Filesystem;
 use CakeI18nLint\Extractor;
@@ -67,7 +67,7 @@ abstract class AbstractCommand extends BaseCommand
         ]);
     }
 
-    protected function project(Arguments $args, ConsoleIo $io): ?Project
+    protected function project(Arguments $args, ConsoleIoInterface $io): ?Project
     {
         try {
             return Project::create(
@@ -95,12 +95,12 @@ abstract class AbstractCommand extends BaseCommand
      * @template T
      *
      * @param \CakeI18nLint\Project $project
-     * @param \Cake\Console\ConsoleIo $io
+     * @param \Cake\Console\ConsoleIoInterface $io
      * @param \Closure(array{domains: array<string, array{generated: string, target: string, new: bool, missing: array<string>, stale: array<string>}>, orphans: array<string, string>}): T $callback
      *
      * @return T
      */
-    protected function withFreshTemplates(Project $project, ConsoleIo $io, Closure $callback): mixed
+    protected function withFreshTemplates(Project $project, ConsoleIoInterface $io, Closure $callback): mixed
     {
         $scratch = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'i18n-lint-' . bin2hex(random_bytes(6));
         $filesystem = new Filesystem();
@@ -149,11 +149,11 @@ abstract class AbstractCommand extends BaseCommand
     }
 
     /**
-     * @param \Cake\Console\ConsoleIo $io
+     * @param \Cake\Console\ConsoleIoInterface $io
      * @param \Cake\Console\Arguments $args
      * @param array<string> $rules Rules that were reported.
      */
-    protected function hints(ConsoleIo $io, Arguments $args, array $rules): void
+    protected function hints(ConsoleIoInterface $io, Arguments $args, array $rules): void
     {
         $hints = Hints::for($rules, $this->commandLine($args, 'sync'), $this->commandLine($args, 'extract'));
         if (!$hints) {
@@ -167,7 +167,7 @@ abstract class AbstractCommand extends BaseCommand
         }
     }
 
-    protected function report(ConsoleIo $io, Project $project, Issue $issue, string $format): void
+    protected function report(ConsoleIoInterface $io, Project $project, Issue $issue, string $format): void
     {
         $file = $project->relative($issue->file);
         if ($format === static::FORMAT_GITHUB) {
@@ -178,7 +178,7 @@ abstract class AbstractCommand extends BaseCommand
                 $issue->line > 0 ? ',line=' . $issue->line : '',
                 $issue->rule,
                 str_replace(["\r", "\n"], ['%0D', '%0A'], $issue->message),
-            ), 1, ConsoleIo::QUIET);
+            ), 1, ConsoleIoInterface::QUIET);
 
             return;
         }
@@ -190,6 +190,6 @@ abstract class AbstractCommand extends BaseCommand
             $issue->severity,
             $issue->message,
             $issue->rule,
-        ), 1, ConsoleIo::QUIET);
+        ), 1, ConsoleIoInterface::QUIET);
     }
 }
