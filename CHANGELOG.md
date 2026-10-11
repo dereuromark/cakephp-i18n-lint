@@ -2,7 +2,9 @@
 
 ## [Unreleased]
 
-- `lint --fail-on <rules>` reports the listed warning rules as errors, e.g. `po.missing,po.obsolete`.
+## [0.1.2] - 2026-10-11
+
+- `lint --fail-on <rules>` reports the listed warning rules as errors, e.g. `po.missing,po.obsolete` (#2).
 
 ## [0.1.1] - 2026-10-11
 
