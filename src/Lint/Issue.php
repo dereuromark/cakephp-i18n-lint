@@ -32,4 +32,9 @@ class Issue
         public readonly string $message,
     ) {
     }
+
+    public function asError(): self
+    {
+        return new self($this->file, $this->line, static::ERROR, $this->rule, $this->message);
+    }
 }

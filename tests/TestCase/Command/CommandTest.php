@@ -218,6 +218,26 @@ class CommandTest extends TestCase
         $this->assertSame([], array_diff($rules, array_keys(Hints::for($rules, 'sync', 'extract'))));
     }
 
+    public function testLintFailOn(): void
+    {
+        $po = $this->read('resources/locales/de/demo.po');
+        $this->write('resources/locales/de/demo.po', str_replace('"Willkommen"', '""', $po) . "\nmsgid \"Old\"\nmsgstr \"Alt\"\n");
+
+        $this->assertSame(0, $this->exec('lint'));
+        $this->assertStringContainsString('0 error(s), 2 warning(s).', $this->out);
+
+        // Only the listed rule fails; the untranslated entry stays a warning.
+        $this->assertSame(1, $this->exec('lint', '--fail-on', 'po.missing, po.obsolete'));
+        $this->assertStringContainsString('demo.po:30: error: "Old" is not in the template anymore. [po.obsolete]', $this->out);
+        $this->assertStringContainsString('warning: "Welcome" is not translated. [po.untranslated]', $this->out);
+        $this->assertStringContainsString('1 error(s), 1 warning(s).', $this->err);
+
+        $this->assertSame(0, $this->exec('lint', '--fail-on', 'po.missing'));
+
+        $this->assertSame(1, $this->exec('lint', '--fail-on', 'po.nope'));
+        $this->assertStringContainsString('Unknown rule(s) for --fail-on: po.nope.', $this->err);
+    }
+
     public function testLintReportsBrokenFiles(): void
     {
         $this->write('resources/locales/de/demo.po', "msgid \"A\"\nmsgstr \"B\n");
