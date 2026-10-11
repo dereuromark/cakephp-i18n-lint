@@ -1,0 +1,24 @@
+#!/usr/bin/env php
+<?php
+declare(strict_types=1);
+
+use I18nLint\Runner;
+
+$autoloaders = [
+    $GLOBALS['_composer_autoload_path'] ?? null,
+    __DIR__ . '/../vendor/autoload.php',
+    __DIR__ . '/../../../autoload.php',
+];
+foreach ($autoloaders as $autoloader) {
+    if ($autoloader !== null && is_file($autoloader)) {
+        require $autoloader;
+
+        break;
+    }
+}
+if (!class_exists(Runner::class)) {
+    fwrite(STDERR, "Composer autoloader not found. Run `composer install` first.\n");
+    exit(1);
+}
+
+exit((new Runner())->run(array_slice($argv, 1)));

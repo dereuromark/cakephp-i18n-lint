@@ -1,0 +1,120 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE file
+ *
+ * @author Mark Scherer
+ * @license https://opensource.org/licenses/MIT MIT License
+ */
+
+namespace I18nLint\Command;
+
+use Cake\Console\Arguments;
+use Cake\Console\ConsoleIo;
+use Cake\Console\ConsoleOptionParser;
+use I18nLint\Lint\Issue;
+use I18nLint\Lint\Linter;
+use I18nLint\Po\Catalog;
+use I18nLint\Po\ParseException;
+use I18nLint\Po\Parser;
+use I18nLint\Project;
+
+/**
+ * Validates POT and PO files.
+ */
+class LintCommand extends AbstractCommand
+{
+    public static function getDescription(): string
+    {
+        return 'Lint the POT templates and PO translations.';
+    }
+
+    protected function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
+    {
+        return $this->addFormatOption(parent::buildOptionParser($parser))
+            ->addOption('strict', [
+                'help' => 'Treat warnings (untranslated, fuzzy, out of sync) as failures.',
+                'boolean' => true,
+            ]);
+    }
+
+    public function execute(Arguments $args, ConsoleIo $io): int
+    {
+        $project = $this->project($args, $io);
+        if ($project === null) {
+            return static::CODE_ERROR;
+        }
+
+        $issues = $this->collect($project);
+        $format = (string)$args->getOption('format');
+        $counts = [Issue::ERROR => 0, Issue::WARNING => 0];
+        foreach ($issues as $issue) {
+            $counts[$issue->severity]++;
+            $this->report($io, $project, $issue, $format);
+        }
+
+        $summary = sprintf('%d error(s), %d warning(s).', $counts[Issue::ERROR], $counts[Issue::WARNING]);
+        if ($counts[Issue::ERROR] || ($args->getOption('strict') && $counts[Issue::WARNING])) {
+            $io->error($summary);
+
+            return static::CODE_ERROR;
+        }
+        $io->success($summary);
+
+        return static::CODE_SUCCESS;
+    }
+
+    /**
+     * @return array<\I18nLint\Lint\Issue>
+     */
+    protected function collect(Project $project): array
+    {
+        $linter = new Linter();
+        $issues = [];
+        $templates = [];
+        foreach ($project->templates() as $domain => $file) {
+            $catalog = $this->parse($file, $issues);
+            if ($catalog !== null) {
+                $templates[$domain] = $catalog;
+                array_push($issues, ...$linter->lintPot($file, $catalog));
+            }
+        }
+        foreach ($project->translations() as $translation) {
+            $catalog = $this->parse($translation['path'], $issues);
+            if ($catalog !== null) {
+                array_push($issues, ...$linter->lintPo(
+                    $translation['path'],
+                    $catalog,
+                    $translation['locale'],
+                    $templates[$translation['domain']] ?? null,
+                ));
+            }
+        }
+
+        return $issues;
+    }
+
+    /**
+     * @param string $file
+     * @param array<\I18nLint\Lint\Issue> $issues
+     */
+    protected function parse(string $file, array &$issues): ?Catalog
+    {
+        $content = (string)file_get_contents($file);
+        if (!mb_check_encoding($content, 'UTF-8')) {
+            $issues[] = new Issue($file, 0, Issue::ERROR, 'po.encoding', 'File is not valid UTF-8.');
+
+            return null;
+        }
+        try {
+            return (new Parser())->parse($content);
+        } catch (ParseException $e) {
+            $issues[] = new Issue($file, $e->poLine, Issue::ERROR, 'po.syntax', $e->getMessage());
+
+            return null;
+        }
+    }
+}

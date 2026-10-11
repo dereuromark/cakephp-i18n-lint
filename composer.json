@@ -1,0 +1,66 @@
+{
+    "name": "dereuromark/cakephp-i18n-lint",
+    "description": "Keeps CakePHP translation catalogs honest: POT drift check, PO sync and PO linting for plugins and apps.",
+    "license": "MIT",
+    "type": "library",
+    "keywords": [
+        "cakephp",
+        "i18n",
+        "gettext",
+        "translations",
+        "po",
+        "pot",
+        "lint",
+        "ci"
+    ],
+    "authors": [
+        {
+            "name": "Mark Scherer",
+            "homepage": "https://www.dereuromark.de",
+            "role": "Maintainer"
+        }
+    ],
+    "homepage": "https://github.com/dereuromark/cakephp-i18n-lint",
+    "support": {
+        "issues": "https://github.com/dereuromark/cakephp-i18n-lint/issues",
+        "source": "https://github.com/dereuromark/cakephp-i18n-lint"
+    },
+    "require": {
+        "php": ">=8.2",
+        "ext-intl": "*",
+        "cakephp/cakephp": "^5.1"
+    },
+    "require-dev": {
+        "php-collective/code-sniffer": "dev-master",
+        "phpstan/phpstan": "^2.0",
+        "phpunit/phpunit": "^11.5 || ^12.0 || ^13.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "I18nLint\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "I18nLint\\Test\\": "tests/"
+        }
+    },
+    "bin": [
+        "bin/i18n-lint"
+    ],
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "config": {
+        "allow-plugins": {
+            "cakephp/plugin-installer": false,
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        },
+        "sort-packages": true
+    },
+    "scripts": {
+        "cs-check": "phpcs --colors",
+        "cs-fix": "phpcbf --colors",
+        "stan": "phpstan analyze",
+        "test": "phpunit"
+    }
+}

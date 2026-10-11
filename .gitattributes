@@ -1,0 +1,18 @@
+* text=auto
+* text eol=lf
+
+*.bat eol=crlf
+
+*.png binary
+*.jpg binary
+*.mo binary
+
+# Not needed in the Composer dist archive
+/.editorconfig export-ignore
+/.gitattributes export-ignore
+/.github export-ignore
+/.gitignore export-ignore
+/phpcs.xml export-ignore
+/phpstan.neon export-ignore
+/phpunit.xml.dist export-ignore
+/tests export-ignore

@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<ruleset name="cakephp-i18n-lint">
+    <arg name="cache" value=".phpcs.cache"/>
+    <arg value="nps"/>
+
+    <file>bin/</file>
+    <file>src/</file>
+    <file>tests/</file>
+    <exclude-pattern>/tests/test_files/</exclude-pattern>
+
+    <rule ref="vendor/php-collective/code-sniffer/PhpCollective/ruleset.xml"/>
+</ruleset>
