@@ -58,8 +58,15 @@ entries do not count as a difference.
 ```text
 resources/locales/comments.pot: error: "Invalid parent id." is missing from the template. [pot.missing]
 resources/locales/comments.pot: error: "The Comment has been saved." is no longer in the source code. [pot.stale]
-2 difference(s). Run `i18n-lint extract` and commit the result.
+
+How to fix:
+  [pot.missing] Run `vendor/bin/i18n-lint extract` and commit the result.
+  [pot.stale] Run `vendor/bin/i18n-lint extract` and commit the result.
+2 difference(s). Run `vendor/bin/i18n-lint extract` and commit the result.
 ```
+
+The printed commands can be pasted as they are: they repeat the `--root`, `--paths` and
+`--locales` options the failing run was called with.
 
 Exits with `1` on any difference. A template whose domain has no strings left in the
 code is reported as a warning only.
@@ -106,6 +113,9 @@ An entry whose plural form changed in the template (singular to plural, or anoth
 | `po.plural-header`       | warning  | Plural entries exist, but the header has no `Plural-Forms`.        |
 
 Errors exit with `1`. Pass `--strict` to fail on warnings too.
+
+After the findings, a `How to fix:` block lists one line per reported rule, with the
+`sync` or `extract` command to run where that is the fix.
 
 ICU validation only applies to strings with placeholders. CakePHP returns a string
 without arguments as it is, so a lone `{` or an apostrophe in such a string is fine.
