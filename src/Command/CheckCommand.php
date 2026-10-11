@@ -40,11 +40,13 @@ class CheckCommand extends AbstractCommand
         }
         $format = (string)$args->getOption('format');
 
-        return $this->withFreshTemplates($project, $io, function (array $diff) use ($project, $io, $format): int {
+        return $this->withFreshTemplates($project, $io, function (array $diff) use ($project, $io, $format, $args): int {
             $drift = 0;
+            $rules = [];
             foreach ($diff['domains'] as $state) {
                 if ($state['new']) {
                     $drift++;
+                    $rules[] = 'pot.missing-file';
                     $this->report($io, $project, new Issue(
                         $state['target'],
                         0,
@@ -58,6 +60,7 @@ class CheckCommand extends AbstractCommand
                 foreach (['missing' => 'is missing from the template', 'stale' => 'is no longer in the source code'] as $kind => $text) {
                     foreach ($state[$kind] as $msgid) {
                         $drift++;
+                        $rules[] = 'pot.' . $kind;
                         $this->report($io, $project, new Issue(
                             $state['target'],
                             0,
@@ -69,6 +72,7 @@ class CheckCommand extends AbstractCommand
                 }
             }
             foreach ($diff['orphans'] as $file) {
+                $rules[] = 'pot.orphan';
                 $this->report($io, $project, new Issue(
                     $file,
                     0,
@@ -78,8 +82,13 @@ class CheckCommand extends AbstractCommand
                 ), $format);
             }
 
+            $this->hints($io, $args, $rules);
             if ($drift) {
-                $io->error(sprintf('%d difference(s). Run `i18n-lint extract` and commit the result.', $drift));
+                $io->error(sprintf(
+                    '%d difference(s). Run `%s` and commit the result.',
+                    $drift,
+                    $this->commandLine($args, 'extract'),
+                ));
 
                 return static::CODE_ERROR;
             }

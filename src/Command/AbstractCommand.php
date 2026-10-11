@@ -18,6 +18,7 @@ use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Utility\Filesystem;
 use CakeI18nLint\Extractor;
+use CakeI18nLint\Lint\Hints;
 use CakeI18nLint\Lint\Issue;
 use CakeI18nLint\Project;
 use CakeI18nLint\TemplateDiffer;
@@ -35,6 +36,13 @@ abstract class AbstractCommand extends BaseCommand
      * @var string
      */
     public const FORMAT_GITHUB = 'github';
+
+    /**
+     * How the tool is called from a project root.
+     *
+     * @var string
+     */
+    public const BINARY = 'vendor/bin/i18n-lint';
 
     protected function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
@@ -111,12 +119,51 @@ abstract class AbstractCommand extends BaseCommand
                 }
             }
             if ($markers) {
-                $io->warning(sprintf('%d call(s) with a non-literal string cannot be extracted.', $markers));
+                $io->warning(sprintf(
+                    '%d call(s) with a non-literal string cannot be extracted. '
+                    . 'List such strings as literals in a file under one of the scanned paths.',
+                    $markers,
+                ));
             }
 
             return $callback((new TemplateDiffer())->diff($project, $scratch));
         } finally {
             $filesystem->deleteDir($scratch);
+        }
+    }
+
+    /**
+     * Command line for another subcommand that can be pasted as is, location options included.
+     */
+    protected function commandLine(Arguments $args, string $command): string
+    {
+        $line = static::BINARY . ' ' . $command;
+        foreach (['root', 'paths', 'locales'] as $option) {
+            $value = $this->stringOption($args, $option);
+            if ($value !== null) {
+                $line .= sprintf(' --%s %s', $option, escapeshellarg($value));
+            }
+        }
+
+        return $line;
+    }
+
+    /**
+     * @param \Cake\Console\ConsoleIo $io
+     * @param \Cake\Console\Arguments $args
+     * @param array<string> $rules Rules that were reported.
+     */
+    protected function hints(ConsoleIo $io, Arguments $args, array $rules): void
+    {
+        $hints = Hints::for($rules, $this->commandLine($args, 'sync'), $this->commandLine($args, 'extract'));
+        if (!$hints) {
+            return;
+        }
+
+        $io->out('');
+        $io->out('How to fix:');
+        foreach ($hints as $rule => $hint) {
+            $io->out(sprintf('  [%s] %s', $rule, $hint));
         }
     }
 

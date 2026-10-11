@@ -7,6 +7,7 @@ namespace CakeI18nLint\Test\TestCase\Command;
 use Cake\Console\ConsoleIo;
 use Cake\Console\TestSuite\StubConsoleOutput;
 use Cake\Utility\Filesystem;
+use CakeI18nLint\Lint\Hints;
 use CakeI18nLint\Runner;
 use PHPUnit\Framework\TestCase;
 
@@ -78,7 +79,9 @@ class CommandTest extends TestCase
         $this->assertStringContainsString('resources/locales/demo.pot: error: "Brand new" is missing from the template. [pot.missing]', $this->out);
         $this->assertStringContainsString('"Welcome" is no longer in the source code. [pot.stale]', $this->out);
         $this->assertStringContainsString('resources/locales/other.pot: error: Template does not exist yet (1 strings). [pot.missing-file]', $this->out);
-        $this->assertStringContainsString('3 difference(s)', $this->err);
+        $extract = "vendor/bin/i18n-lint extract --root '" . $this->root . "'";
+        $this->assertStringContainsString('3 difference(s). Run `' . $extract . '` and commit the result.', $this->err);
+        $this->assertStringContainsString("How to fix:\n  [pot.missing] Run `" . $extract . '` and commit the result.', $this->out);
         $this->assertSame($before, $this->read('resources/locales/demo.pot'));
 
         $this->assertSame(0, $this->exec('extract'));
@@ -93,6 +96,7 @@ class CommandTest extends TestCase
         $this->assertStringContainsString('other.pot has no strings', $this->err);
         $this->assertSame(0, $this->exec('check'));
         $this->assertStringContainsString('[pot.orphan]', $this->out);
+        $this->assertStringContainsString('[pot.orphan] Delete the template', $this->out);
     }
 
     public function testCheckDetectsPluralChange(): void
@@ -161,6 +165,7 @@ class CommandTest extends TestCase
 
         $this->assertSame(1, $this->exec('sync', '--dry-run'));
         $this->assertStringContainsString('resources/locales/de/demo.po: 1 to add, 1 to remove.', $this->out);
+        $this->assertStringContainsString("Run `vendor/bin/i18n-lint sync --root '" . $this->root . "'`.", $this->err);
         $this->assertSame($po, $this->read('resources/locales/de/demo.po'));
 
         $this->assertSame(0, $this->exec('sync'));
@@ -173,11 +178,13 @@ class CommandTest extends TestCase
     {
         $this->assertSame(0, $this->exec('lint', '--strict'), $this->out . $this->err);
         $this->assertStringContainsString('0 error(s), 0 warning(s).', $this->out);
+        $this->assertStringNotContainsString('How to fix', $this->out);
 
         $po = $this->read('resources/locales/de/demo.po');
         $this->write('resources/locales/de/demo.po', str_replace('"Willkommen"', '""', $po));
         $this->assertSame(0, $this->exec('lint'));
         $this->assertStringContainsString('resources/locales/de/demo.po:27: warning: "Welcome" is not translated. [po.untranslated]', $this->out);
+        $this->assertStringContainsString("How to fix:\n  [po.untranslated] Add the translation.", $this->out);
         $this->assertSame(1, $this->exec('lint', '--strict'));
 
         $this->write('resources/locales/de/demo.po', str_replace('"Hallo {0}"', '"Hallo {name}"', $po));
@@ -185,6 +192,30 @@ class CommandTest extends TestCase
         $this->assertStringContainsString('uses placeholder(s) the source does not have: {name}. [po.placeholder-unknown]', $this->out);
         $this->assertSame(1, $this->exec('lint', '--format', 'github'));
         $this->assertStringContainsString('::error file=resources/locales/de/demo.po,line=15,title=po.placeholder-unknown::', $this->out);
+    }
+
+    public function testLintHintsNameTheSyncCommandWithItsOptions(): void
+    {
+        $this->write('resources/locales/de/demo.po', $this->read('resources/locales/de/demo.po') . "\nmsgid \"Old\"\nmsgstr \"Alt\"\n");
+
+        $this->assertSame(0, $this->exec('lint', '--locales', 'resources/locales'));
+        $this->assertStringContainsString(
+            "[po.obsolete] Run `vendor/bin/i18n-lint sync --root '" . $this->root . "' --locales 'resources/locales'`.",
+            $this->out,
+        );
+    }
+
+    public function testEveryRuleHasAHint(): void
+    {
+        $rules = [];
+        foreach (glob(dirname(__DIR__, 3) . '/src/{Lint/Linter,Command/*}.php', GLOB_BRACE) ?: [] as $file) {
+            preg_match_all("/'(po[t]?\\.[a-z-]+)'/", (string)file_get_contents($file), $matches);
+            $rules = array_merge($rules, $matches[1]);
+        }
+        $rules = array_values(array_unique([...$rules, 'pot.missing', 'pot.stale']));
+
+        $this->assertGreaterThan(15, count($rules));
+        $this->assertSame([], array_diff($rules, array_keys(Hints::for($rules, 'sync', 'extract'))));
     }
 
     public function testLintReportsBrokenFiles(): void

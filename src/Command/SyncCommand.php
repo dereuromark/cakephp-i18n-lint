@@ -107,7 +107,7 @@ class SyncCommand extends AbstractCommand
             return static::CODE_SUCCESS;
         }
         if ($dryRun) {
-            $io->error(sprintf('%d PO file(s) out of sync. Run `i18n-lint sync`.', $changed));
+            $io->error(sprintf('%d PO file(s) out of sync. Run `%s`.', $changed, $this->commandLine($args, 'sync')));
 
             return static::CODE_ERROR;
         }

@@ -51,10 +51,13 @@ class LintCommand extends AbstractCommand
         $issues = $this->collect($project);
         $format = (string)$args->getOption('format');
         $counts = [Issue::ERROR => 0, Issue::WARNING => 0];
+        $rules = [];
         foreach ($issues as $issue) {
             $counts[$issue->severity]++;
+            $rules[] = $issue->rule;
             $this->report($io, $project, $issue, $format);
         }
+        $this->hints($io, $args, $rules);
 
         $summary = sprintf('%d error(s), %d warning(s).', $counts[Issue::ERROR], $counts[Issue::WARNING]);
         if ($counts[Issue::ERROR] || ($args->getOption('strict') && $counts[Issue::WARNING])) {
