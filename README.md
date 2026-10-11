@@ -1,6 +1,6 @@
 # CakePHP i18n Lint
 
-[![CI](https://github.com/dereuromark/cakephp-i18n-lint/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/dereuromark/cakephp-i18n-lint/actions/workflows/ci.yml)
+[![CI](https://github.com/dereuromark/cakephp-i18n-lint/actions/workflows/ci.yml/badge.svg?branch=cake6)](https://github.com/dereuromark/cakephp-i18n-lint/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 Checks the translation catalogs of a CakePHP plugin or application:
@@ -14,13 +14,15 @@ Extraction uses CakePHP's own `i18n extract` command, so the result is the same 
 `bin/cake i18n extract` would write. It runs without a booted application, which is
 what makes it usable in the CI of a plugin.
 
+This branch targets CakePHP 6 and PHP 8.5 or later.
+
 ## Installation
 
 ```bash
 composer require --dev dereuromark/cakephp-i18n-lint
 ```
 
-Requires PHP 8.2+ and CakePHP 5.1+.
+Requires PHP 8.5 or later and CakePHP 6.
 
 ## Usage
 
@@ -188,7 +190,7 @@ vendor/bin/i18n-lint check --paths src,templates,resources/i18n
 
 ## Limits
 
-- CakePHP 5.4+ reflects the scanned classes to read enum labels. A class whose parent
+- CakePHP reflects the scanned classes to read enum labels. A class whose parent
   cannot be autoloaded is skipped for that step, its `__()` calls are still found. Run
   with `-v` to see which classes were skipped.
 - Only existing PO files are synced. A new locale starts as a copy of the template.

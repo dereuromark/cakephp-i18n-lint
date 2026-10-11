@@ -26,14 +26,14 @@
         "source": "https://github.com/dereuromark/cakephp-i18n-lint"
     },
     "require": {
-        "php": ">=8.2",
+        "php": ">=8.5",
         "ext-intl": "*",
-        "cakephp/cakephp": "^5.1"
+        "cakephp/cakephp": "^6.0@dev"
     },
     "require-dev": {
         "php-collective/code-sniffer": "dev-master",
         "phpstan/phpstan": "^2.0",
-        "phpunit/phpunit": "^11.5 || ^12.0 || ^13.0"
+        "phpunit/phpunit": "^13.0"
     },
     "autoload": {
         "psr-4": {
@@ -48,7 +48,7 @@
     "bin": [
         "bin/i18n-lint"
     ],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "prefer-stable": true,
     "config": {
         "allow-plugins": {

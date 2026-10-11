@@ -12,8 +12,7 @@ declare(strict_types=1);
 
 namespace CakeI18nLint\Command;
 
-use Cake\Console\Arguments;
-use Cake\Console\ConsoleIo;
+use Cake\Console\ConsoleIoInterface;
 use Cake\Utility\Filesystem;
 
 /**
@@ -26,8 +25,10 @@ class ExtractCommand extends AbstractCommand
         return 'Regenerate the POT templates from the source code.';
     }
 
-    public function execute(Arguments $args, ConsoleIo $io): int
+    public function execute(): int
     {
+        $args = $this->args;
+        $io = $this->io;
         $project = $this->project($args, $io);
         if ($project === null) {
             return static::CODE_ERROR;
