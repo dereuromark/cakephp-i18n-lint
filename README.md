@@ -1,6 +1,6 @@
 # CakePHP i18n Lint
 
-[![CI](https://github.com/dereuromark/cakephp-i18n-lint/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/dereuromark/cakephp-i18n-lint/actions/workflows/ci.yml)
+[![CI](https://github.com/dereuromark/cakephp-i18n-lint/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/dereuromark/cakephp-i18n-lint/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 Checks the translation catalogs of a CakePHP plugin or application:
